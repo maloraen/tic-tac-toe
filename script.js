@@ -89,3 +89,22 @@ const GameFlow = (function (playerOneName = "Player One", playerTwoName = "Playe
 
   return {playRound, getActivePlayer, checkForWin, gameOver};
 })();
+
+const displayControl = (function () {
+  const spaces = document.querySelectorAll(".space");
+  spaces.forEach((space) => {
+    const spaceText = document.createElement('p');
+    spaceText.innerText = "";
+    space.appendChild(spaceText);
+
+    space.addEventListener("click", () => {
+      let spaceNumber = space.classList[1];
+      console.log(`space ${spaceNumber} was clicked!`);
+      
+      if (spaceText.innerText == "") {
+        spaceText.innerText = GameFlow.getActivePlayer().marker;
+        GameFlow.playRound(spaceNumber);
+      }
+    })
+  })
+})();
