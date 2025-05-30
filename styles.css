@@ -1,0 +1,38 @@
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container {
+    margin: auto;
+    padding: 25px;
+    border-radius: 25px;
+    background-color: lightgrey;
+    display: flex;
+    flex-direction: column;
+}
+
+div[class*="row"] {
+    display: flex;
+}
+
+.space {
+    margin: 5px;
+    padding: 75px;
+    border-radius: 10px;
+}
+
+.space:hover {
+    background-color: grey;
+}
+
+.row-two {
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+.column-two {
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+}
