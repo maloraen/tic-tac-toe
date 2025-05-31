@@ -92,6 +92,7 @@ const GameFlow = (function (
   printRound();
 
   return {
+    players,
     playRound,
     getActivePlayer,
     checkForWin,
@@ -105,13 +106,24 @@ const displayControl = (function () {
   const consoleBoard = GameFlow.board;
   const UIBoard = document.querySelector(".board");
 
+  let startButtonClicked = false;
+
   // highlight winning pattern
-  function highlightWin() {
+  function highlightWinner() {
     const winpattern = GameFlow.getWinningPattern();
+    const winner = GameFlow.getActivePlayer().name;
+
     winpattern.forEach((i) => {
       const space = document.querySelector(`.space${i + 1}`);
+
       space.style.color = "aqua";
     });
+
+      const winnerAnnouncement = document.createElement("h1");
+      winnerAnnouncement.classList.add("winner");
+      winnerAnnouncement.innerText = `${winner} Wins!`;
+      winnerAnnouncement.style.color = "aqua";
+      document.querySelector(".control").append(winnerAnnouncement);
   }
 
   // board turns red on a tie
@@ -120,6 +132,12 @@ const displayControl = (function () {
     spaces.forEach((space) => {
       space.style.color = "red";
     });
+
+    const tieAnnouncement = document.createElement("h1");
+    tieAnnouncement.classList.add("tie");
+    tieAnnouncement.innerText = "Tie!";
+    tieAnnouncement.style.color = "red";
+    document.querySelector(".control").append(tieAnnouncement);
   };
 
   // create board, place markers, play game
@@ -135,15 +153,36 @@ const displayControl = (function () {
       spaceElem.appendChild(pElem);
 
       pElem.addEventListener("click", () => {
-        GameFlow.playRound(i + 1);
-        renderBoard();
+        if (startButtonClicked) {
+          GameFlow.playRound(i + 1);
+          renderBoard();
+        }
+        else {
+          formControl.startGame();
+          GameFlow.playRound(i + 1);
+          renderBoard();
+        }
       });
+
+      pElem.addEventListener("mouseover", () => {
+  if (!GameFlow.getGameStatus() && consoleBoard.spaces[i] === "") {
+    pElem.style.opacity = .5;
+    pElem.innerText = GameFlow.getActivePlayer().marker;
+
+  }
+});
+
+pElem.addEventListener("mouseout", () => {
+  if (!GameFlow.getGameStatus() && consoleBoard.spaces[i] === "") {
+    pElem.innerText = "";
+  }
+});
 
       UIBoard.appendChild(spaceElem); // add spaces to board
     });
 
-    // call highlightWin() or redBoard() *after* re-rendering, if game is over
-    if (GameFlow.getGameStatus()) (GameFlow.getWinningPattern().length > 0) ? highlightWin() : redBoard();
+    // call highlightWinner() or redBoard() *after* re-rendering, if game is over
+    if (GameFlow.getGameStatus()) (GameFlow.getWinningPattern().length > 0) ? highlightWinner() : redBoard();
   };
 
   // reset button to clear board and restart game
@@ -152,9 +191,57 @@ const displayControl = (function () {
     location.reload();
   });
 
+  // FORM CONTROL
+
+  const formControl = (function () {
+    const controlDiv = document.querySelector(".control");
+    const form = document.querySelector("form");
+    const playerOneNameInput = document.querySelector("#player-one-name");
+    const playerTwoNameInput = document.querySelector("#player-two-name");
+    const startButton = document.querySelector("#start-button");
+
+    function startGame(player1 = "Player One", player2 = "Player Two") {
+      startButtonClicked = true;
+      GameFlow.players[0].name = player1;
+      GameFlow.players[1].name = player2;
+
+      form.remove();
+
+      const playerOneInfo = document.createElement("div");
+      playerOneInfo.classList.add("player-one-info");
+      const playerOneName = document.createElement("h2");
+      const playerOneMarker = document.createElement("h3");
+      playerOneName.innerText = player1;
+      playerOneMarker.innerText = "X";
+
+      playerOneInfo.appendChild(playerOneName);
+      playerOneInfo.appendChild(playerOneMarker);
+
+      const playerTwoInfo = document.createElement("div");
+      playerTwoInfo.classList.add("player-two-info");
+      const playerTwoName = document.createElement("h2");
+      const playerTwoMarker = document.createElement("h3");
+      playerTwoName.innerText = player2;
+      playerTwoMarker.innerText = "O";
+
+      playerTwoInfo.appendChild(playerTwoName);
+      playerTwoInfo.appendChild(playerTwoMarker);
+
+      controlDiv.appendChild(playerOneInfo);
+      controlDiv.appendChild(playerTwoInfo);
+    }
+
+    startButton.addEventListener("click", function(event) {
+      event.preventDefault();
+      formControl.startGame(playerOneNameInput.value || "Player One", playerTwoNameInput.value || "Player Two");
+    })
+
+    return { form, startGame }
+  })()
+
   renderBoard(); // initial board display
 
-  return { highlightWin, redBoard };
+  return { highlightWinner, redBoard };
 })();
 
 
@@ -164,5 +251,19 @@ const displayControl = (function () {
   - player names
   - custom markers ?
 - result announcement
+- show user marker on hover
 
 */
+
+const spaces = document.querySelectorAll(`div[class*="space"]`); // select all markers
+    spaces.forEach((space) => {
+      space.addEventListener("mouseover", () => {
+        const p = space.querySelector("p");
+        p.innerText = GameFlow.getActivePlayer().marker;
+      })
+
+      space.addEventListener("mouseout", () => {
+        const p = space.querySelector("p");
+        p.innerText = "";
+      })
+    });
