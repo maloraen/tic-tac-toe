@@ -1,6 +1,6 @@
 const Gameboard = function () {
-  let spaces = ["", "", "","", "", "","", "", ""]; // create board
-  const placeMarker = (space, marker) => spaces[space - 1] = marker; // - 1 to line the spaces up properly with the 0-indexed array
+  let spaces = ["", "", "", "", "", "", "", "", ""]; // create board
+  const placeMarker = (space, marker) => (spaces[space - 1] = marker); // - 1 to line the spaces up properly with the 0-indexed array
   const printBoard = () => console.log(spaces);
 
   return { spaces, placeMarker, printBoard };
@@ -10,7 +10,10 @@ function Player(name, marker) {
   return { name, marker };
 }
 
-const GameFlow = (function (playerOneName = "Player One", playerTwoName = "Player Two") {
+const GameFlow = (function (
+  playerOneName = "Player One",
+  playerTwoName = "Player Two"
+) {
   const board = Gameboard(); // get access to the Gameboard()
   let gameOver = false;
 
@@ -18,41 +21,44 @@ const GameFlow = (function (playerOneName = "Player One", playerTwoName = "Playe
   const players = [
     {
       name: playerOneName,
-      marker: "X"
+      marker: "X",
     },
     {
       name: playerTwoName,
-      marker: "O"
-    }
+      marker: "O",
+    },
   ];
 
   let activePlayer = players[0];
-  const switchPlayerTurn = () => activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  const switchPlayerTurn = () =>
+    (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
   const getActivePlayer = () => activePlayer;
 
   const printRound = () => {
     board.printBoard();
-    if (gameOver == false) {
+    if (!gameOver) {
       console.log(`${getActivePlayer().name}'s turn`);
     } else {
       console.log("Game Over!");
     }
-  }
+  };
 
   const playRound = (space) => {
-    if (board.spaces[space-1] == "") { // if selected space is empty
-      console.log(`Placing ${getActivePlayer().name}'s marker in space ${space}`);
-      board.placeMarker(space, getActivePlayer().marker);
+    if (!gameOver) {
+      if (board.spaces[space - 1] == "") { // if selected space is empty
+        console.log(`Placing ${getActivePlayer().name}'s marker in space ${space}`);
+        board.placeMarker(space, getActivePlayer().marker);
 
-      checkForWin(getActivePlayer());
-      if (gameOver == false) switchPlayerTurn();
-    } 
-    else {
-      console.log("This space is taken!");
+        checkForWin(getActivePlayer());
+        if (!gameOver) switchPlayerTurn();
+      } else {
+        console.log("This space is taken!");
+      }
+      printRound();
     }
-    printRound();
-  }
-
+  };
+  
+  let winningPattern = [];
   const checkForWin = (player) => {
     const winPatterns = [
       [0, 1, 2], // rows
@@ -62,11 +68,11 @@ const GameFlow = (function (playerOneName = "Player One", playerTwoName = "Playe
       [1, 4, 7],
       [2, 5, 8],
       [0, 4, 8], // diagonals
-      [2, 4, 6]
-    ]
+      [2, 4, 6],
+    ];
 
     // if all spaces are taken, and there is no win
-    if (!board.spaces.includes("") && gameOver == false) {
+    if (!board.spaces.includes("") && !gameOver) {
       console.log("Tie!");
       gameOver = true;
     }
@@ -77,34 +83,81 @@ const GameFlow = (function (playerOneName = "Player One", playerTwoName = "Playe
       if (board.spaces[i] == player.marker) indexes.push(i);
     }
 
-    winPatterns.forEach(pattern => { // loop through possible patterns
-      if (pattern.every(index => indexes.includes(index))) { // for each pattern, check to see if each number is inside the indexes array
+    // check if each number of any pattern is in the indexes array
+    winPatterns.forEach((pattern) => {
+      if (pattern.every((index) => indexes.includes(index))) {
         console.log(`${player.name} wins!`);
+        console.log("game over true");
+        winningPattern = pattern;
+        displayControl.highlightWinningPattern();
         gameOver = true;
       }
-    })
-  }
+    });
+  };
 
+  const getGameStatus = () => gameOver;
+  const getWinningPattern = () => winningPattern;
   printRound();
 
-  return {playRound, getActivePlayer, checkForWin, gameOver};
+  return { playRound, getActivePlayer, checkForWin, getGameStatus, getWinningPattern };
 })();
 
 const displayControl = (function () {
+  let spaceNumber;
+  // populate board
   const spaces = document.querySelectorAll(".space");
   spaces.forEach((space) => {
-    const spaceText = document.createElement('p');
+    const spaceText = document.createElement("p");
     spaceText.innerText = "";
     space.appendChild(spaceText);
 
     space.addEventListener("click", () => {
-      let spaceNumber = space.classList[1];
-      console.log(`space ${spaceNumber} was clicked!`);
-      
-      if (spaceText.innerText == "") {
-        spaceText.innerText = GameFlow.getActivePlayer().marker;
-        GameFlow.playRound(spaceNumber);
+      const gameStatus = GameFlow.getGameStatus();
+      spaceNumber = space.classList[1];
+
+      if (!gameStatus) {
+          if (spaceText.innerText == "") {
+            spaceText.innerText = GameFlow.getActivePlayer().marker;
+            GameFlow.playRound(spaceNumber);
+            console.log(`status: ${gameStatus}`);
+        }
       }
-    })
-  })
+    });
+  });
+
+  // reset game
+  const resetButton = document.querySelector(".reset");
+  resetButton.addEventListener("click", () => {
+    location.reload();
+  });
+
+  // highlight winning pattern
+  function highlightWinningPattern() {
+    const winpattern = GameFlow.getWinningPattern();
+    // get the spaces with the numbers that match the numbers in the winning pattern (+1 because of the 0-index)
+    
+    console.log(`
+        ${winpattern[0]} + 1 = ${winpattern[0] + 1}
+        ${winpattern[1]} + 1 = ${winpattern[1] + 1}
+        ${winpattern[2]} + 1 = ${winpattern[2] + 1}
+    `);
+
+    winpattern.forEach(i => {
+      const space = document.querySelector(`.space${i + 1}`);
+      console.log(space);
+      space.style.color = "aqua";
+    });
+  }
+
+  return { highlightWinningPattern };
 })();
+
+/* TO DO:
+
+  - highlight winning pattern
+  - TIC TAC TOE banner
+  - winner announcement
+  - reset button
+
+*/
+
