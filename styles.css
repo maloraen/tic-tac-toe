@@ -23,43 +23,68 @@ body {
     margin: auto;
     height: 50vh;
     width: 50vh;
-    padding: 10px;
+    border: 10px solid lightgrey;
     border-radius: 25px;
-    background-color: lightgrey;
     color: black;
     display: grid;
     justify-content: center;
     align-items: center;
-}
-
-div[class*="row"] {
-    display: flex;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .space {
-    height: 15vh;
-    width: 15vh;
-    margin: 5px;
-    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: lightgrey;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.space:hover {
-    background-color: grey;
+.space p:hover {
+    background-color: rgba(128, 128, 128, 0.5);
 }
 
 .space p {
-    font-size: 75px;
+    border-radius: 15px;
+    font-size: 5vw;
+    line-height: 1;
+    height: 95%;
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.row-two {
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
+.space1 {
+    border-top-left-radius: 13px;
 }
 
-.column-two {
-    border-left: 2px solid black;
-    border-right: 2px solid black;
+.space3 {
+    border-top-right-radius: 13px;
+}
+
+.space7 {
+    border-bottom-left-radius: 13px;
+}
+
+.space9 {
+    border-bottom-right-radius: 13px;
+}
+
+.space1, .space2, .space3 {
+    border-bottom: 3px solid black;
+}
+
+.space7, .space8, .space9 {
+    border-top: 3px solid black;
+}
+
+.space1, .space4, .space7 {
+    border-right: 3px solid black;
+}
+
+.space3, .space6, .space9 {
+    border-left: 3px solid black;
 }

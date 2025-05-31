@@ -71,13 +71,6 @@ const GameFlow = (function (
       [2, 4, 6],
     ];
 
-    // if all spaces are taken, and there is no win
-    if (!board.spaces.includes("") && !gameOver) {
-      console.log("Tie!");
-      displayControl.redBoard();
-      gameOver = true;
-    }
-
     // take the index of each space filled by current player's marker
     let indexes = [];
     for (let i = 0; i < 9; i++) {
@@ -85,15 +78,22 @@ const GameFlow = (function (
     }
 
     // check if each number of any pattern is in the indexes array
+    let winner = false;
     winPatterns.forEach((pattern) => {
       if (pattern.every((index) => indexes.includes(index))) {
         console.log(`${player.name} wins!`);
-        console.log("game over true");
         winningPattern = pattern;
         displayControl.highlightWinningPattern();
         gameOver = true;
+        winner = true;
       }
     });
+
+    if (!winner && !board.spaces.includes("")) {
+      console.log("Tie!");
+      displayControl.redBoard();
+      gameOver = true;
+    }
   };
 
   const getGameStatus = () => gameOver;
@@ -108,11 +108,9 @@ const displayControl = (function () {
   // populate board
   const spaces = document.querySelectorAll(".space");
   spaces.forEach((space) => {
-    const spaceText = document.createElement("p");
-    spaceText.innerText = "";
-    space.appendChild(spaceText);
+    const spaceText = space.querySelector("p");
 
-    space.addEventListener("click", () => {
+    spaceText.addEventListener("click", () => {
       const gameStatus = GameFlow.getGameStatus();
       spaceNumber = space.classList[1];
 
