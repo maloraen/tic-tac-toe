@@ -116,13 +116,13 @@ const displayControl = (function () {
     winpattern.forEach((i) => {
       const space = document.querySelector(`.space${i + 1}`);
 
-      space.style.color = "aqua";
+      space.style.color = "var(--win)";
     });
 
       const winnerAnnouncement = document.createElement("h1");
       winnerAnnouncement.classList.add("winner");
       winnerAnnouncement.innerText = `${winner} Wins!`;
-      winnerAnnouncement.style.color = "aqua";
+      winnerAnnouncement.style.color = "var(--win)";
       document.querySelector(".control").append(winnerAnnouncement);
   }
 
@@ -130,13 +130,13 @@ const displayControl = (function () {
   const redBoard = () => {
     const spaces = document.querySelectorAll(`div[class*="space"]`); // select all markers
     spaces.forEach((space) => {
-      space.style.color = "red";
+      space.style.color = "var(--tie)";
     });
 
     const tieAnnouncement = document.createElement("h1");
     tieAnnouncement.classList.add("tie");
     tieAnnouncement.innerText = "Tie!";
-    tieAnnouncement.style.color = "red";
+    tieAnnouncement.style.color = "var(--tie)";
     document.querySelector(".control").append(tieAnnouncement);
   };
 
@@ -247,23 +247,6 @@ pElem.addEventListener("mouseout", () => {
 
 /* TO DO
 
-- user input
-  - player names
-  - custom markers ?
-- result announcement
-- show user marker on hover
+- custom markers ?
 
 */
-
-const spaces = document.querySelectorAll(`div[class*="space"]`); // select all markers
-    spaces.forEach((space) => {
-      space.addEventListener("mouseover", () => {
-        const p = space.querySelector("p");
-        p.innerText = GameFlow.getActivePlayer().marker;
-      })
-
-      space.addEventListener("mouseout", () => {
-        const p = space.querySelector("p");
-        p.innerText = "";
-      })
-    });
