@@ -32,7 +32,7 @@ body {
     grid-template-columns: repeat(3, 1fr);
 }
 
-.space {
+[class*="space"] {
     height: 100%;
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -42,11 +42,7 @@ body {
     align-items: center;
 }
 
-.space p:hover {
-    background-color: rgba(128, 128, 128, 0.5);
-}
-
-.space p {
+[class*="space"] p {
     border-radius: 15px;
     font-size: 5vw;
     line-height: 1;
@@ -55,6 +51,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+[class*="space"] p:hover {
+    background-color: rgba(128, 128, 128, 0.5);
 }
 
 .space1 {

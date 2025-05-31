@@ -1,7 +1,7 @@
 const Gameboard = function () {
   let spaces = ["", "", "", "", "", "", "", "", ""]; // create board
   const placeMarker = (space, marker) => (spaces[space - 1] = marker); // - 1 to line the spaces up properly with the 0-indexed array
-  const printBoard = () => console.log(spaces);
+  const printBoard = () => console.log(spaces); // for console version
 
   return { spaces, placeMarker, printBoard };
 };
@@ -45,8 +45,11 @@ const GameFlow = (function (
 
   const playRound = (space) => {
     if (!gameOver) {
-      if (board.spaces[space - 1] == "") { // if selected space is empty
-        console.log(`Placing ${getActivePlayer().name}'s marker in space ${space}`);
+      if (board.spaces[space - 1] == "") {
+        // if selected space is empty
+        console.log(
+          `Placing ${getActivePlayer().name}'s marker in space ${space}`
+        );
         board.placeMarker(space, getActivePlayer().marker);
 
         checkForWin(getActivePlayer());
@@ -57,7 +60,7 @@ const GameFlow = (function (
       printRound();
     }
   };
-  
+
   let winningPattern = [];
   const checkForWin = (player) => {
     const winPatterns = [
@@ -83,85 +86,96 @@ const GameFlow = (function (
       if (pattern.every((index) => indexes.includes(index))) {
         console.log(`${player.name} wins!`);
         winningPattern = pattern;
-        displayControl.highlightWinningPattern();
         gameOver = true;
         winner = true;
       }
     });
 
+    // tie logic
     if (!winner && !board.spaces.includes("")) {
       console.log("Tie!");
-      displayControl.redBoard();
       gameOver = true;
     }
   };
 
-  const getGameStatus = () => gameOver;
-  const getWinningPattern = () => winningPattern;
   printRound();
 
-  return { playRound, getActivePlayer, checkForWin, getGameStatus, getWinningPattern };
+  return {
+    playRound,
+    getActivePlayer,
+    checkForWin,
+    getGameStatus: () => gameOver,
+    getWinningPattern: () => winningPattern,
+    board,
+  };
 })();
 
 const displayControl = (function () {
-  let spaceNumber;
-  // populate board
-  const spaces = document.querySelectorAll(".space");
-  spaces.forEach((space) => {
-    const spaceText = space.querySelector("p");
+  const consoleBoard = GameFlow.board; // get access to board
+  const UIBoard = document.querySelector(".board"); // select board element for display
 
-    spaceText.addEventListener("click", () => {
-      const gameStatus = GameFlow.getGameStatus();
-      spaceNumber = space.classList[1];
-
-      if (!gameStatus) {
-          if (spaceText.innerText == "") {
-            spaceText.innerText = GameFlow.getActivePlayer().marker;
-            GameFlow.playRound(spaceNumber);
-            console.log(`status: ${gameStatus}`);
-        }
-      }
+  // highlight winning pattern
+  function highlightWin() {
+    const winpattern = GameFlow.getWinningPattern(); // get access to the indexes of the winning pattern of markers
+    winpattern.forEach((i) => {
+      const space = document.querySelector(`.space${i + 1}`); // select each space with index adjusted for 0-indexing
+      space.style.color = "aqua";
     });
-  });
+  }
 
-  // reset game
+  // make board red on a tie
+  const redBoard = () => {
+    const spaces = document.querySelectorAll(`div[class*="space"]`); // select all markers
+    spaces.forEach((space) => {
+      space.style.color = "red";
+    });
+  };
+
+  // create board, place markers, play game
+  const renderBoard = () => {
+    UIBoard.innerHTML = ""; // clear board
+
+    // render spaces for each space in array
+    consoleBoard.spaces.forEach((space, i) => {
+      // create the space divs
+      const spaceElem = document.createElement("div");
+      spaceElem.classList.add(`space${i + 1}`);
+
+      // add paragraph elements
+      const pElem = document.createElement("p");
+      pElem.innerText = `${space}`;
+      spaceElem.appendChild(pElem);
+
+      // place markers and play game
+      pElem.addEventListener("click", () => {
+        GameFlow.playRound(i + 1);
+        renderBoard();
+      });
+
+      UIBoard.appendChild(spaceElem); // add spaces to board
+    });
+
+    // call highlightWin() or redBoard() after re-rendering, to re-apply style changes
+    if (GameFlow.getGameStatus()) (GameFlow.getWinningPattern().length > 0) ? highlightWin() : redBoard();
+  };
+
+  // reset board
   const resetButton = document.querySelector(".reset");
   resetButton.addEventListener("click", () => {
     location.reload();
   });
 
-  // highlight winning pattern
-  function highlightWinningPattern() {
-    const winpattern = GameFlow.getWinningPattern();
-    // get the spaces with the numbers that match the numbers in the winning pattern (+1 because of the 0-index)
-    
-    console.log(`
-        ${winpattern[0]} + 1 = ${winpattern[0] + 1}
-        ${winpattern[1]} + 1 = ${winpattern[1] + 1}
-        ${winpattern[2]} + 1 = ${winpattern[2] + 1}
-    `);
+  renderBoard(); // initial board display
 
-    winpattern.forEach(i => {
-      const space = document.querySelector(`.space${i + 1}`);
-      console.log(space);
-      space.style.color = "aqua";
-    });
-  }
-
-  // make the boad red on a tie
-  const redBoard = () => {
-    const spaces = document.querySelectorAll(".space");
-    spaces.forEach((space) => {
-      space.style.color = "red";
-    })
-  }
-
-  return { highlightWinningPattern, redBoard };
+  return { highlightWin, redBoard };
 })();
 
-/* TO DO:
-  - winner announcement
-  - clean up code
-  - tie -> red board
-*/
 
+/* TO DO
+
+- user input
+  - player names
+  - custom markers ?
+- result announcement
+
+*/
