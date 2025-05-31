@@ -74,6 +74,7 @@ const GameFlow = (function (
     // if all spaces are taken, and there is no win
     if (!board.spaces.includes("") && !gameOver) {
       console.log("Tie!");
+      displayControl.redBoard();
       gameOver = true;
     }
 
@@ -149,15 +150,20 @@ const displayControl = (function () {
     });
   }
 
-  return { highlightWinningPattern };
+  // make the boad red on a tie
+  const redBoard = () => {
+    const spaces = document.querySelectorAll(".space");
+    spaces.forEach((space) => {
+      space.style.color = "red";
+    })
+  }
+
+  return { highlightWinningPattern, redBoard };
 })();
 
 /* TO DO:
-
-  - highlight winning pattern
-  - TIC TAC TOE banner
   - winner announcement
-  - reset button
-
+  - clean up code
+  - tie -> red board
 */
 
