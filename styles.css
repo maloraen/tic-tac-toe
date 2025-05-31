@@ -21,12 +21,15 @@ body {
 
 .board {
     margin: auto;
-    padding: 25px;
+    height: 50vh;
+    width: 50vh;
+    padding: 10px;
     border-radius: 25px;
     background-color: lightgrey;
     color: black;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    justify-content: center;
+    align-items: center;
 }
 
 div[class*="row"] {
@@ -34,9 +37,9 @@ div[class*="row"] {
 }
 
 .space {
+    height: 15vh;
+    width: 15vh;
     margin: 5px;
-    height: 150px;
-    width: 150px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
