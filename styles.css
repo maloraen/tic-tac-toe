@@ -1,4 +1,12 @@
 :root {
+    --lightblue: rgb(207, 215, 228); 
+    --blue: rgb(141, 168, 209); 
+    --darkblue: rgb(14, 93, 211); 
+
+    --lightgold: rgb(245, 187, 81); 
+    --gold: rgb(226, 152, 14);
+    --darkgold: rgb(241, 153, 21);
+
     --color1: rgb(252, 227, 175); /* input background */
     --color2: rgb(233, 186, 85); /* body background, space hover */
     --color3: rgb(240, 167, 33); /* placeholder text, board background */
@@ -10,8 +18,14 @@
     --tie: rgb(206, 33, 33);
 }
 
+@font-face {
+    font-family: "CherryBombOne";
+    src: url(CherryBombOne-Regular.ttf) format('truetype');
+}
+
 * {
     box-sizing: border-box;
+    font-family: "CherryBombOne";
 }
 
 body {
@@ -20,9 +34,8 @@ body {
     margin: 0;
     height: 100vh;
     text-align: center;
-    font-family: ;
     display: grid;
-    grid-template-rows: 1fr 3fr 1fr;
+    grid-template-rows: 1fr 3fr;
 }
 
 .header, .footer {
@@ -60,11 +73,14 @@ body {
 
 input, button {
     border: none;
-    border-radius: 15px;
+    border-radius: 25px;
     padding: 10px;
-    height: 30px;
+    height: 50px;
+    width: 250px;
     margin: 5px;
-    font-weight: bold;
+    font-size: 25px;
+    letter-spacing: 2px;
+    text-align: center;
 }
 
 input {
@@ -73,13 +89,16 @@ input {
 
 input::placeholder {
     color: var(--color3);
+    font-size: 25px;
+    letter-spacing: 2px;
+    text-align: center;
 }
 
 button {
-    width: 100px;
+    width: 150px;
     background-color: var(--color4);
-    padding: 0;
     color: var(--color6);
+    padding: 0;
 }
 
 button:hover {

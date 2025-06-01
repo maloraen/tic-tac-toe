@@ -166,7 +166,6 @@ const displayControl = (function () {
 
       pElem.addEventListener("mouseover", () => {
   if (!GameFlow.getGameStatus() && consoleBoard.spaces[i] === "") {
-    pElem.style.opacity = .5;
     pElem.innerText = GameFlow.getActivePlayer().marker;
 
   }
@@ -185,11 +184,12 @@ pElem.addEventListener("mouseout", () => {
     if (GameFlow.getGameStatus()) (GameFlow.getWinningPattern().length > 0) ? highlightWinner() : redBoard();
   };
 
+  /*
   // reset button to clear board and restart game
   const resetButton = document.querySelector(".reset");
   resetButton.addEventListener("click", () => {
     location.reload();
-  });
+  }); */
 
   // FORM CONTROL
 
