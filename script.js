@@ -224,11 +224,11 @@ pElem.addEventListener("mouseout", () => {
       controlDiv.appendChild(newDiv);
 
       const playerOneName = document.createElement("h2");
-      playerOneName.innerText = player1;
+      playerOneName.innerText = `${player1}: X`;
       newDiv.appendChild(playerOneName);
 
       const playerTwoName = document.createElement("h2");
-      playerTwoName.innerText = player2;
+      playerTwoName.innerText = `${player2}: O`;
       newDiv.appendChild(playerTwoName);
 
       
