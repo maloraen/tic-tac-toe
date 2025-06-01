@@ -106,7 +106,7 @@ const displayControl = (function () {
   const consoleBoard = GameFlow.board;
   const UIBoard = document.querySelector(".board");
 
-  let startButtonClicked = false;
+  let gameStarted = false;
 
   // highlight winning pattern
   function highlightWinner() {
@@ -123,7 +123,17 @@ const displayControl = (function () {
       winnerAnnouncement.classList.add("winner");
       winnerAnnouncement.innerText = `${winner} Wins!`;
       winnerAnnouncement.style.color = "var(--win)";
+      document.querySelector(".control").innerHTML = "";
       document.querySelector(".control").append(winnerAnnouncement);
+      const restartButton = document.createElement("button");
+      restartButton.classList.add("restart-button");
+      restartButton.innerText = "Restart";
+      document.querySelector(".control").append(restartButton);
+
+        // reset button to clear board and restart game
+      restartButton.addEventListener("click", () => {
+        location.reload();
+      });
   }
 
   // board turns red on a tie
@@ -137,7 +147,17 @@ const displayControl = (function () {
     tieAnnouncement.classList.add("tie");
     tieAnnouncement.innerText = "Tie!";
     tieAnnouncement.style.color = "var(--tie)";
+    document.querySelector(".control").innerHTML = "";
     document.querySelector(".control").append(tieAnnouncement);
+    const restartButton = document.createElement("button");
+      restartButton.classList.add("restart-button");
+    restartButton.innerText = "Restart";
+    document.querySelector(".control").append(restartButton);
+
+        // reset button to clear board and restart game
+      restartButton.addEventListener("click", () => {
+        location.reload();
+      });
   };
 
   // create board, place markers, play game
@@ -153,7 +173,7 @@ const displayControl = (function () {
       spaceElem.appendChild(pElem);
 
       pElem.addEventListener("click", () => {
-        if (startButtonClicked) {
+        if (gameStarted) {
           GameFlow.playRound(i + 1);
           renderBoard();
         }
@@ -184,13 +204,6 @@ pElem.addEventListener("mouseout", () => {
     if (GameFlow.getGameStatus()) (GameFlow.getWinningPattern().length > 0) ? highlightWinner() : redBoard();
   };
 
-  /*
-  // reset button to clear board and restart game
-  const resetButton = document.querySelector(".reset");
-  resetButton.addEventListener("click", () => {
-    location.reload();
-  }); */
-
   // FORM CONTROL
 
   const formControl = (function () {
@@ -201,34 +214,33 @@ pElem.addEventListener("mouseout", () => {
     const startButton = document.querySelector("#start-button");
 
     function startGame(player1 = "Player One", player2 = "Player Two") {
-      startButtonClicked = true;
+      gameStarted = true;
       GameFlow.players[0].name = player1;
       GameFlow.players[1].name = player2;
 
       form.remove();
 
-      const playerOneInfo = document.createElement("div");
-      playerOneInfo.classList.add("player-one-info");
+      const newDiv = document.createElement("div");
+      controlDiv.appendChild(newDiv);
+
       const playerOneName = document.createElement("h2");
-      const playerOneMarker = document.createElement("h3");
       playerOneName.innerText = player1;
-      playerOneMarker.innerText = "X";
+      newDiv.appendChild(playerOneName);
 
-      playerOneInfo.appendChild(playerOneName);
-      playerOneInfo.appendChild(playerOneMarker);
-
-      const playerTwoInfo = document.createElement("div");
-      playerTwoInfo.classList.add("player-two-info");
       const playerTwoName = document.createElement("h2");
-      const playerTwoMarker = document.createElement("h3");
       playerTwoName.innerText = player2;
-      playerTwoMarker.innerText = "O";
+      newDiv.appendChild(playerTwoName);
 
-      playerTwoInfo.appendChild(playerTwoName);
-      playerTwoInfo.appendChild(playerTwoMarker);
+      
+      const restartButton = document.createElement("button");
+      restartButton.classList.add("restart-button");
+      restartButton.innerText = "Restart";
+      controlDiv.append(restartButton);
 
-      controlDiv.appendChild(playerOneInfo);
-      controlDiv.appendChild(playerTwoInfo);
+      // reset button to clear board and restart game
+      restartButton.addEventListener("click", () => {
+        location.reload();
+      });
     }
 
     startButton.addEventListener("click", function(event) {
@@ -248,5 +260,8 @@ pElem.addEventListener("mouseout", () => {
 /* TO DO
 
 - custom markers ?
+- hover effect only works on empty spaces
+- stop things moving around as the display changes
+- reset button
 
 */

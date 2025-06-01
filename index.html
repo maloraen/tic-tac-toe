@@ -1,3 +1,4 @@
+<!--ORIGINAL-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,21 +13,22 @@
 
         <div class="control">
             <form>
-                <div class="player-one-form">
-                    <input type="text" id="player-one-name" name="player-one-name" placeholder="Player One Name">
+                <div>
+                    <input type="text" id="player-one-name" name="player-one-name" placeholder="Player One" autocomplete="off">
+                    <input type="text" name="player-two-name" id="player-two-name" placeholder="Player Two" autocomplete="off">
                 </div>
-                <div class="player-two-form">
-                    <input type="text" name="player-two-name" id="player-two-name" placeholder="Player Two Name">
-                </div>
-                <div class="button-div">
-                    <button type="submit" id="start-button">Play</button>
-                </div>
+                
+                <button type="submit" id="start-button">Play</button>
             </form>
         </div>
     </div>
 
-    <div class="board">
+    <div class="main">
+        <div class="board">
+        </div>
     </div>
+
+    <div class="footer"></div>
     
     <script src="script.js"></script>
 </body>

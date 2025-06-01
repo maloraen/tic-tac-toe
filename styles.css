@@ -44,11 +44,20 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: var(--darkblue);
 }
 
-form, .control {
+.control {
     display: flex;
-    height: calc(5vh + 10px);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.control div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {
@@ -73,26 +82,31 @@ input, button {
 
 input {
     background-color: var(--color1);
-    caret-color: var(--win);
-    color: var(--win);
+    caret-color: var(--darkblue);
+    color: var(--blue);
 }
 
 input::placeholder {
     color: var(--color3);
     letter-spacing: 2px;
     text-align: center;
+    text-decoration: underline;
 }
 
 input:focus {
-    outline: none;
+    outline: 2px solid var(--darkblue);
 }
 
-.control > h2 {
-    background-color: var(--color1);
+input:focus::placeholder {
+  color: transparent;
+}
+
+.control > div > h2 {
     height: 5vh;
     width: 20vw;
     border-radius: 25px;
     margin: 5px;
+    color: var(--darkblue);
 }
 
 button {
@@ -103,16 +117,16 @@ button {
 
 button:hover {
     cursor: pointer;
-    border: 3px solid var(--color5);
+    border: 3px solid var(--darkblue);
+    color: var(--darkblue);
 }
 
 .winner, .tie {
-    box-shadow: 0px 0px 50px var(--color1);
-    background-color: rgba(252, 228, 175, 0.5);
     border-radius: 50px;
     padding: 0 20px;
     text-align: center;
-    font-size: 75px;
+    font-size: calc(5vh - 10px);
+    margin: 0;
 }
 
 .main {
@@ -125,9 +139,9 @@ button:hover {
     width: 50vh;
     border: 10px solid var(--color3);
     background-color: var(--color3);
-    box-shadow: 1px 1px 20px 5px var(--color4);
+    box-shadow: 1px 1px 20px 5px var(--blue);
     border-radius: 25px;
-    color: var(--color4);
+    color: var(--darkblue);
     display: grid;
     justify-content: center;
     align-items: center;
@@ -156,36 +170,21 @@ button:hover {
 
 [class*="space"] p:hover {
     background-color: var(--color2);
-}
-
-.space1 {
-    border-top-left-radius: 13px;
-}
-
-.space3 {
-    border-top-right-radius: 13px;
-}
-
-.space7 {
-    border-bottom-left-radius: 13px;
-}
-
-.space9 {
-    border-bottom-right-radius: 13px;
+    color: var(--blue);
 }
 
 .space1, .space2, .space3 {
-    border-bottom: 3px solid var(--color5);
+    border-bottom: 3px solid var(--darkblue);
 }
 
 .space7, .space8, .space9 {
-    border-top: 3px solid var(--color5);
+    border-top: 3px solid var(--darkblue);
 }
 
 .space1, .space4, .space7 {
-    border-right: 3px solid var(--color5);
+    border-right: 3px solid var(--darkblue);
 }
 
 .space3, .space6, .space9 {
-    border-left: 3px solid var(--color5);
+    border-left: 3px solid var(--darkblue);
 }
