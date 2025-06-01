@@ -166,7 +166,7 @@ const displayControl = (function () {
 
     consoleBoard.spaces.forEach((space, i) => {
       const spaceElem = document.createElement("div");
-      spaceElem.classList.add(`space${i + 1}`);
+      spaceElem.classList.add(`space${i + 1}`, `${(space == "") ? "empty" : "filled"}`);
 
       const pElem = document.createElement("p");
       pElem.innerText = `${space}`;
@@ -185,10 +185,10 @@ const displayControl = (function () {
       });
 
       pElem.addEventListener("mouseover", () => {
-  if (!GameFlow.getGameStatus() && consoleBoard.spaces[i] === "") {
-    pElem.innerText = GameFlow.getActivePlayer().marker;
+        if (!GameFlow.getGameStatus() && consoleBoard.spaces[i] === "") {
+          pElem.innerText = GameFlow.getActivePlayer().marker;
 
-  }
+        }
 });
 
 pElem.addEventListener("mouseout", () => {

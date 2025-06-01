@@ -123,8 +123,8 @@ button:hover {
 
 .winner, .tie {
     border-radius: 50px;
-    padding: 0 20px;
     text-align: center;
+    text-shadow: 1px 1px 10px var(--color5);
     font-size: calc(5vh - 10px);
     margin: 0;
 }
@@ -168,7 +168,7 @@ button:hover {
     align-items: center;
 }
 
-[class*="space"] p:hover {
+[class*="empty"] p:hover {
     background-color: var(--color2);
     color: var(--blue);
 }
