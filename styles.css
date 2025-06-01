@@ -20,7 +20,7 @@
 
 @font-face {
     font-family: "CherryBombOne";
-    src: url(("./fonts/CherryBombOne-Regular.ttf") format('truetype');
+    src: url("./fonts/CherryBombOne-Regular.ttf") format('truetype');
 }
 
 * {
